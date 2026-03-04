@@ -1,0 +1,24 @@
+name: maturity_sast(Basic semgrep scans)
+
+on: [push]
+
+jobs:
+  semgrep_scan:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Install Semgrep
+        run: pip install semgrep
+
+      - name: Run Semgrep scan
+        run: semgrep --config=p/default .
+
+        #with:
+        #config: 'p/ci'
+        # You can specify additional options here, such as:
+        # config: 'p/ci, p/security-audit'
+        # or use a custom ruleset:
+        # config: './path/to/your/ruleset.yml'
