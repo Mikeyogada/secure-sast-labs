@@ -1,15 +1,54 @@
 import os
 import subprocess
 import pickle
+import sqlite3
 
+# -----------------------------
+# Command Injection
+# -----------------------------
 def run_command(cmd):
-    os.system(cmd) #vulnerable code for command injection attack, the user can insert a malicious command that will be executed on the server, this is a classic command injection vulnerability.
+    os.system(cmd)  # vulnerable: user-controlled command execution
 
-def login(password): #vulnerable code for authentication bypass attack, the user can insert a password that will bypass the authentication and gain access to the system, this is a classic authentication bypass vulnerability.
-    if password == "admin123": #credentials are hardcoded and can be easily guessed, this is a common mistake that leads to authentication bypass vulnerabilities.
+
+# -----------------------------
+# Authentication bypass / hardcoded credentials
+# -----------------------------
+def login(password):
+    if password == "admin123":  # hardcoded secret
         return True
+    return False
 
-def deserialize(data): #vulnerable code for deserialization attack, the user can insert a malicious payload that will be deserialized and executed on the server, this is a classic deserialization vulnerability.
-    return pickle.loads(data)
 
-eval("print('danger')") #vulnerable code for code injection attack, the user can insert a malicious code that will be executed on the server, this is a classic code injection vulnerability.
+# -----------------------------
+# Insecure deserialization
+# -----------------------------
+def deserialize(data):
+    return pickle.loads(data)  # vulnerable: arbitrary code execution
+
+
+# -----------------------------
+# Code injection
+# -----------------------------
+eval("print('danger')")  # vulnerable: arbitrary code execution
+
+
+# -----------------------------
+# SQL Injection
+# -----------------------------
+def get_user(username):
+    conn = sqlite3.connect("users.db")
+    cursor = conn.cursor()
+
+    query = f"SELECT * FROM users WHERE username = '{username}'"  # vulnerable SQL query
+    cursor.execute(query)
+
+    return cursor.fetchall()
+
+
+# -----------------------------
+# Path traversal
+# -----------------------------
+def read_file(filename):
+    with open("/var/data/" + filename) as f:  # vulnerable file access
+        return f.read()
+    
