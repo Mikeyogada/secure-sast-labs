@@ -1,0 +1,35 @@
+name: codeql (main)
+
+on:
+    push:
+      branches: [main]
+
+jobs:
+  codeql-main-multitool:
+    runs-on: ubuntu-latest
+
+    #define permissions
+    permissions:
+      contents:  read
+      security-events: write 
+    
+    #define steps
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: intialize CodeQL
+        uses: github/codeql-action/init@v2
+        with:
+          languages: python
+
+      - name: Perform CodeQL Analysis
+        uses: github/codeql-action/analyze@v2
+        
+        
+      
+
+    
+
+
+
