@@ -1,0 +1,23 @@
+name: PR Fast Security Scan (Multi-tool)
+
+on: 
+    pull_request:
+
+jobs:
+    fast-sast-multi-A: #diff-aware SAST scan using semgrep
+        runs-on: ubuntu-latest
+
+        permissions:
+            contents: read # Grant read permissions for repository contents
+            #on Fast we are not uploading results to code scanning, so we do not need write permissions for code scanning
+            #feedback is directly in the PR checks, so we do not need write permissions for pull requests
+
+        steps:
+            - name: Checkout code #download the repo code into the runner so the workflow can use it for scanning
+              uses: actions/checkout@v3
+
+            - name: Install Tools #install the necessary tools for scanning
+              run: pip install semgrep #only these for fast scanning
+
+            - name: Run Semgrep scan for PR #pattern detection using Semgrep
+              run: semgrep --config=p/ci #run semgrep with the specified configuration (p/ci) on the current directory (.) and output results in JSON format to a file named semgrep-results.json
