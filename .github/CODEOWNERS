@@ -1,0 +1,5 @@
+#protect CI Workflows
+.github/Workflows/* @Mikeyogada
+
+#protect semgrep custom rules
+.semgrep/* @Mikeyogada
