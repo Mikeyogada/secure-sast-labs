@@ -1,4 +1,4 @@
-name: main security (Depp Tier-Multitools)
+name: main security (Deep Tier-Multitools)
 
 on: 
   push:
@@ -21,9 +21,9 @@ jobs:
       - name: install tools
         run: pip install semgrep bandit
 
-      #semgrep full scna
+      #semgrep full scan (Org + ci/default)
       - name: Full semgrep scan
-        run: semgrep --config=p/default .
+        run: semgrep --config=p/default . --config=.semgrep/org-custom-rules.yml
 
       #generate Semgrep SARIF
       - name: Generate Semgrep SARIF
