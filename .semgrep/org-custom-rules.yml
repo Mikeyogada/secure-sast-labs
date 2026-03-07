@@ -1,0 +1,25 @@
+rules:
+- id: org-custom-command-injection
+  languages: [ python ]
+  patterns:
+  - pattern-either:
+    - pattern: |
+        import os
+        ...
+        os.system($CMD)
+    - pattern: |
+        import os
+        ...
+        getattr(os, "system")($CMD)
+    - pattern: |
+        import os as $ALIAS
+        ...
+        $ALIAS.system($CMD)
+  - pattern-not: |
+      # nosemgrep: python.lang.security.injection.os_command_injection
+  message: "Potential command injection vulnerability. Avoid using os.system or getattr for executing commands."
+  severity: ERROR
+  #detects dynaminc calls to os.system
+  #detects direct calls to os.system
+  #detect alias to os.system
+  #detect suppression of semgrep rule
